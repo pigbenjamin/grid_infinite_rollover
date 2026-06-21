@@ -1,0 +1,29 @@
+# 期貨無限換倉＋網格自動化交易系統 — Python 依賴套件
+# 安裝：pip install -r requirements.txt
+
+# 設定檔解析
+PyYAML>=6.0
+
+# 資料處理
+pandas>=2.0
+numpy>=1.24
+pyarrow>=14.0        # Parquet 格式讀寫（歷史資料）
+
+# 儀表板後端
+fastapi>=0.110
+uvicorn[standard]>=0.27
+websockets>=12.0
+
+# 資料庫
+# SQLite 為 Python 內建，無需額外安裝
+
+# 回測報告圖表
+matplotlib>=3.8
+seaborn>=0.13        # Sharpe 熱力圖
+
+# 告警通知
+httpx>=0.26          # Telegram / LINE Notify HTTP 請求（取代 requests）
+
+# 測試
+pytest>=8.0
+pytest-asyncio>=0.23

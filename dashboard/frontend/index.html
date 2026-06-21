@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GridBot 監控儀表板</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>GridBot 監控儀表板</h1>
+    <span id="conn-status" class="badge badge-grey">連線中...</span>
+  </header>
+
+  <!-- 控制面板 -->
+  <section id="control-panel">
+    <button id="btn-stop" class="btn btn-danger" onclick="emergencyStop()">緊急停止</button>
+    <button id="btn-resume" class="btn btn-success" onclick="resumeTrading()">恢復交易</button>
+  </section>
+
+  <div class="grid-layout">
+    <!-- 區塊 A：資金與保證金 -->
+    <section class="card" id="block-a">
+      <h2>A — 資金與保證金</h2>
+      <div class="metric"><span>帳戶淨值</span><span id="total-equity">--</span></div>
+      <div class="metric"><span>可用保證金</span><span id="avail-margin">--</span></div>
+      <div class="metric"><span>浮動損益</span><span id="unrealized-pnl">--</span></div>
+      <div class="metric"><span>真實槓桿</span><span id="leverage">--</span></div>
+      <div id="leverage-indicator" class="level-safe">SAFE</div>
+    </section>
+
+    <!-- 區塊 D：持倉明細 -->
+    <section class="card" id="block-d">
+      <h2>D — 持倉明細</h2>
+      <div class="metric"><span>合約</span><span id="pos-symbol">--</span></div>
+      <div class="metric"><span>口數</span><span id="pos-qty">--</span></div>
+      <div class="metric"><span>均價</span><span id="pos-cost">--</span></div>
+      <div class="metric"><span>最新價</span><span id="pos-price">--</span></div>
+      <div class="metric"><span>未實現損益</span><span id="pos-pnl">--</span></div>
+    </section>
+
+    <!-- 區塊 C：未成交委託單 -->
+    <section class="card" id="block-c">
+      <h2>C — 未成交委託單</h2>
+      <table id="orders-table">
+        <thead><tr><th>方向</th><th>價格</th><th>口數</th><th>時間</th></tr></thead>
+        <tbody id="orders-body"></tbody>
+      </table>
+    </section>
+
+    <!-- 區塊 F：系統日誌 -->
+    <section class="card" id="block-f">
+      <h2>F — 系統日誌</h2>
+      <ul id="log-list"></ul>
+    </section>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

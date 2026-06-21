@@ -1,0 +1,16 @@
+[Unit]
+Description=GridBot Dashboard Backend
+After=network.target
+
+[Service]
+Type=simple
+User=trader
+WorkingDirectory=/opt/gridbot
+ExecStart=/opt/gridbot/venv/bin/uvicorn dashboard.backend.server:app --host 0.0.0.0 --port 8080
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

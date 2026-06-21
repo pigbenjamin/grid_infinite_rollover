@@ -1,0 +1,76 @@
+# 期貨無限換倉＋網格自動化交易系統 — 系統設定檔
+# 所有策略參數集中於此，不寫死於程式碼中。
+# 切換合約（台指 ↔ 微台）只需修改 contract 區塊。
+
+# 合約規格
+contract:
+  symbol: "MXTF"              # 微台期代碼（台指期：TXFF）
+  multiplier: 50               # 每點金額（台指期：200）
+  original_margin: 47000       # 原始保證金（元）
+  maintenance_margin: 36000    # 維持保證金（元）
+
+# 網格策略參數
+grid:
+  min_position: 2              # 最低持倉口數（底倉）
+  max_position: 8              # 最大持倉口數上限（超過則暫停加倉）
+  tiers:                       # 各級別：[口數上限, 加倉步長%]
+    - [4, 1.0]                 # 0–4 口：跌 1% 加倉
+    - [6, 2.0]                 # 5–6 口：跌 2% 加倉
+    - [8, 4.0]                 # 7–8 口：跌 4% 加倉
+  sell_step_pct: 2.0           # 漲 N% 執行減倉（賣出平倉）
+  intraday_drop_pct: 2.0       # 盤中自當日高點回跌 N% 觸發攔截加倉
+  intraday_cooldown_min: 30    # 盤中回跌攔截後 Cooldown 時間（分鐘）
+
+# 換倉參數
+rollover:
+  dte_threshold: 5             # 剩餘交易日 ≤ N 時觸發換倉
+
+# 風控參數（三級槓桿閥值）
+risk:
+  leverage_warn: 5.0           # 黃色警示：暫停加倉
+  leverage_reduce: 7.0         # 橘色警告：自動市價減倉 25%
+  leverage_critical: 9.0       # 紅色緊急：減倉至最低持倉，發 CRITICAL 警報
+
+# 選擇權避險觸發條件（三項需同時成立）
+options_hedge:
+  trigger_loss_pct: 5.0        # 均價虧損幅度達 N% 才考慮觸發
+  days_since_last_sell: 3      # 距上次減倉至少 N 個交易日
+  sc_delta_target: -0.28       # Sell Call 目標 Delta（−0.25 ~ −0.30）
+  bp_cost_ratio: 0.30          # Buy Put 成本 ≤ SC 權利金收入的 N 倍
+  option_dte_min: 14           # 選擇權最小剩餘日曆日
+  option_dte_max: 21           # 選擇權最大剩餘日曆日
+
+# 帳戶設定
+account:
+  initial_capital: 1500000     # 初始入金（元），建議 150–180 萬
+
+# 回測設定
+backtest:
+  slippage_points: 1           # 每筆滑價點數
+  commission_per_lot: 50       # 每口手續費（元）
+  futures_tax_rate: 0.00002    # 期交稅率（千分之零點二）
+  walk_forward_train_months: 6 # Walk-Forward 訓練視窗（月）
+  walk_forward_test_months: 2  # Walk-Forward 測試視窗（月）
+
+# 儀表板設定
+dashboard:
+  host: "0.0.0.0"
+  port: 8080
+  ws_port: 8081
+  snapshot_interval_sec: 60   # 帳戶狀態快照頻率（秒）
+
+# 告警通知（擇一設定）
+notification:
+  provider: "telegram"         # "telegram" 或 "line"
+  token: ""                    # Telegram Bot Token 或 LINE Notify Token
+  chat_id: ""                  # Telegram Chat ID（LINE Notify 不需要此欄）
+
+# 資料路徑
+data:
+  tick_dir: "data/historical/tick"
+  kline_dir: "data/historical/kline"
+  rollover_spread_csv: "data/rollover_spread/rollover_spread.csv"
+  trading_calendar_csv: "data/calendar/trading_calendar.csv"
+  db_path: "storage/trading.db"
+  log_path: "logs/trading.log"
+  backup_dir: "backups"

@@ -1,0 +1,16 @@
+[Unit]
+Description=GridBot Trading Core
+After=network.target
+
+[Service]
+Type=simple
+User=trader
+WorkingDirectory=/opt/gridbot
+ExecStart=/opt/gridbot/venv/bin/python main.py
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
